@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "794752055168",
+    "project_id": "messz-c77b8",
+    "storage_bucket": "messz-c77b8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:794752055168:android:74a48697616e32db44f365",
+        "android_client_info": {
+          "package_name": "com.example.messapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDH7sfMCJpn86yB2C77JqzNgaXCMF_YsNQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
