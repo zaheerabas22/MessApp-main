@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:messapp/mainscreens/adminhome.dart';
 import 'package:messapp/mainscreens/Welcome/welcome_screen.dart';
 import 'package:messapp/mainscreens/SignUpSelectionScreem.dart';
+import 'package:messapp/mainscreens/splashscreen.dart';
 
 import 'auth/login.dart';
 import 'firebase_options.dart';
@@ -22,10 +23,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        title: 'Smart Mess App',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const WelcomeScreen());
+        home: AnimatedSplashScreen());
   }
 }

@@ -32,21 +32,21 @@ class _InventoryManagementScreenState extends State<InventoryManagementScreen> {
   }
 
   // Function to load inventory data from Firestore
-  Future<void> _loadInventoryData() async {
+  Future<List<InventoryItem>> _loadInventoryData() async {
     final user = FirebaseAuth.instance.currentUser;
+    List<InventoryItem> items = [];
 
     if (user != null) {
       final snapshot = await _firestore.collection('inventory').get();
-      final items = snapshot.docs
+      items = snapshot.docs
           .map((doc) => InventoryItem(
                 name: doc['name'] ?? '',
                 quantity: doc['quantity'] ?? 0,
               ))
           .toList();
-      setState(() {
-        inventoryItems = items;
-      });
     }
+
+    return items;
   }
 
   // Function to add an item to Firestore
@@ -74,13 +74,23 @@ class _InventoryManagementScreenState extends State<InventoryManagementScreen> {
         title: Text('Inventory Management'),
       ),
       body: FutureBuilder(
-        // Replace with your logic to fetch data from Firestore
         future: _loadInventoryData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator(); // Show a loading indicator
+            // Loading placeholder
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
+            // Error handling
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else if (snapshot.data == null || snapshot.data!.isEmpty) {
+            // No data available
+            return Center(
+              child: Text('No data available.'),
+            );
           } else {
             // Data loaded successfully, display it
             List<InventoryItem> inventoryItems =
