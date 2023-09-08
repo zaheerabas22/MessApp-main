@@ -82,7 +82,7 @@ class _SignUpSelectionScreenState extends State<SignUpSelectionScreen> {
                         ),
                       ),
                       child: const Text(
-                        'User',
+                        'Student',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,

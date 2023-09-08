@@ -15,12 +15,13 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   int _selectedIndex = 0;
   final List<Widget> _widgetOptions = <Widget>[
     const MessMenuUserScreen(),
-    const AttendecScreen(),
+    const AttendanceScreen(),
     const ComplainScreen(),
     const UserAccountScreen(),
   ];
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),

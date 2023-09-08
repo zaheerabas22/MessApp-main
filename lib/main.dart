@@ -2,12 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:messapp/mainscreens/adminhome.dart';
 import 'package:messapp/mainscreens/Welcome/welcome_screen.dart';
-import 'package:messapp/mainscreens/SignUpSelectionScreem.dart';
-import 'package:messapp/mainscreens/splashscreen.dart';
 
 import 'auth/login.dart';
 import 'firebase_options.dart';
-import 'mainscreens/userhome.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,11 +20,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Smart Mess App',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: AnimatedSplashScreen());
+      debugShowCheckedModeBanner: false,
+      title: 'Smart Mess App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const WelcomeScreen(),
+      //home: const Attendance(),
+    );
   }
 }

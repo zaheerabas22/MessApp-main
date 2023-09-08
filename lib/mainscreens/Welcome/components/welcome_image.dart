@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:messapp/mainscreens/constants.dart';
 
@@ -22,9 +21,10 @@ class WelcomeImage extends StatelessWidget {
             const Spacer(),
             Expanded(
               flex: 8,
-              child: SvgPicture.asset(
-                "assets/icons/chat.svg",
-              ),
+              child: SizedBox(
+                  height: 200,
+                  width: 200,
+                  child: Image.asset("assets/images/logo.png")),
             ),
             const Spacer(),
           ],

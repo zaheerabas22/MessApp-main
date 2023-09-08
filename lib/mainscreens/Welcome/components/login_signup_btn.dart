@@ -63,7 +63,7 @@ class LoginAndSignupBtn extends StatelessWidget {
                       30), // Adjust the radius value as needed
                 ),
                 primary: kPrimaryLightColor,
-                elevation: 0),
+                elevation: 2),
             child: Text(
               "Sign Up".toUpperCase(),
               style: const TextStyle(color: Colors.black),

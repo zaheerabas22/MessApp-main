@@ -17,7 +17,7 @@ class _AnimatedSplashScreenState extends State<AnimatedSplashScreen>
     super.initState();
 
     // Simulate some loading time with a delay
-    Timer(const Duration(seconds: 5), () {
+    Timer(const Duration(seconds: 4), () {
       // Navigate to the login screen after the delay
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const WelcomeScreen()),

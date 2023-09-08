@@ -11,20 +11,20 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Background(
+    return const Background(
       child: SingleChildScrollView(
         child: SafeArea(
           child: Responsive(
             desktop: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                const Expanded(
+                Expanded(
                   child: WelcomeImage(),
                 ),
                 Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       SizedBox(
                         width: 450,
                         child: LoginAndSignupBtn(),
@@ -34,7 +34,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ],
             ),
-            mobile: const MobileWelcomeScreen(),
+            mobile: MobileWelcomeScreen(),
           ),
         ),
       ),
@@ -49,12 +49,12 @@ class MobileWelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        const WelcomeImage(),
+        WelcomeImage(),
         Row(
-          children: const [
+          children: [
             Spacer(),
             Expanded(
               flex: 8,

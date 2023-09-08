@@ -17,6 +17,18 @@ class _UserSignupScreenState extends State<UserSignupScreen> {
   String _email = '';
   String _password = '';
   bool _isLoading = false;
+  bool _passwordVisible = false;
+
+  // Custom validator for email
+  String? validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your email';
+    }
+    if (!value.endsWith('@uog.edu.pk')) {
+      return 'Email must end with @uog.edu.pk';
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +76,8 @@ class _UserSignupScreenState extends State<UserSignupScreen> {
                     filled: true,
                     fillColor: Colors.white, // Background color
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0)),
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
                   ),
                 ),
               ),
@@ -87,7 +100,8 @@ class _UserSignupScreenState extends State<UserSignupScreen> {
                     filled: true,
                     fillColor: Colors.white, // Background color
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0)),
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
                   ),
                 ),
               ),
@@ -95,12 +109,7 @@ class _UserSignupScreenState extends State<UserSignupScreen> {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.9,
                 child: TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    return null;
-                  },
+                  validator: validateEmail, // Use custom email validator
                   onSaved: (value) {
                     _email = value!;
                   },
@@ -110,7 +119,8 @@ class _UserSignupScreenState extends State<UserSignupScreen> {
                     filled: true,
                     fillColor: Colors.white, // Background color
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0)),
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
                   ),
                 ),
               ),
@@ -127,14 +137,30 @@ class _UserSignupScreenState extends State<UserSignupScreen> {
                   onSaved: (value) {
                     _password = value!;
                   },
-                  obscureText: true,
+                  obscureText: !_passwordVisible,
                   decoration: InputDecoration(
                     labelText: 'Password',
                     prefixIcon: Icon(Icons.lock),
                     filled: true,
                     fillColor: Colors.white, // Background color
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0)),
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    suffixIcon: Transform.translate(
+                      offset: const Offset(0, -5),
+                      child: IconButton(
+                        icon: Icon(
+                          _passwordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _passwordVisible = !_passwordVisible;
+                          });
+                        },
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -167,10 +193,57 @@ class _UserSignupScreenState extends State<UserSignupScreen> {
                             'role': 'student',
                           });
                         }).then((value) {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return const LoginScreen();
-                          }));
+                          // create doc to store attendance for current month for current user
+                          CollectionReference attendance = FirebaseFirestore
+                              .instance
+                              .collection('attendance');
+                          attendance.doc().set({
+                            'uid': FirebaseAuth.instance.currentUser!.uid,
+                            'current_month': DateTime.now().month,
+                            'current_year': DateTime.now().year,
+                            'data': {
+                              '1': {'breakfast': false, 'lunch': false},
+                              '2': {'breakfast': false, 'lunch': false},
+                              '3': {'breakfast': false, 'lunch': false},
+                              '4': {'breakfast': false, 'lunch': false},
+                              '5': {'breakfast': false, 'lunch': false},
+                              '6': {'breakfast': false, 'lunch': false},
+                              '7': {'breakfast': false, 'lunch': false},
+                              '8': {'breakfast': false, 'lunch': false},
+                              '9': {'breakfast': false, 'lunch': false},
+                              '10': {'breakfast': false, 'lunch': false},
+                              '11': {'breakfast': false, 'lunch': false},
+                              '12': {'breakfast': false, 'lunch': false},
+                              '13': {'breakfast': false, 'lunch': false},
+                              '14': {'breakfast': false, 'lunch': false},
+                              '15': {'breakfast': false, 'lunch': false},
+                              '16': {'breakfast': false, 'lunch': false},
+                              '17': {'breakfast': false, 'lunch': false},
+                              '18': {'breakfast': false, 'lunch': false},
+                              '19': {'breakfast': false, 'lunch': false},
+                              '20': {'breakfast': false, 'lunch': false},
+                              '21': {'breakfast': false, 'lunch': false},
+                              '22': {'breakfast': false, 'lunch': false},
+                              '23': {'breakfast': false, 'lunch': false},
+                              '24': {'breakfast': false, 'lunch': false},
+                              '25': {'breakfast': false, 'lunch': false},
+                              '26': {'breakfast': false, 'lunch': false},
+                              '27': {'breakfast': false, 'lunch': false},
+                              '28': {'breakfast': false, 'lunch': false},
+                              '29': {'breakfast': false, 'lunch': false},
+                              '30': {'breakfast': false, 'lunch': false},
+                              '31': {'breakfast': false, 'lunch': false},
+                            }
+                          }).then((value) {
+                            setState(() {
+                              _isLoading = false;
+                            });
+
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return const LoginScreen();
+                            }));
+                          });
                         });
                       } on FirebaseAuthException catch (e) {
                         setState(() {

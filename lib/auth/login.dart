@@ -32,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 const SizedBox(height: 20),
                 Transform.translate(
-                  offset: Offset(0, -50),
+                  offset: const Offset(0, -50),
                   child: const Text(
                     'Welcome to Mess App',
                     style: TextStyle(
@@ -51,6 +51,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
+                    } else if (!value.contains('@uog.edu.pk')) {
+                      return 'Invalid email format';
                     }
                     return null;
                   },
@@ -97,17 +99,20 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(30.0),
                       borderSide: BorderSide(color: Colors.blue),
                     ),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _passwordVisible
-                            ? Icons.visibility
-                            : Icons.visibility_off,
+                    suffixIcon: Transform.translate(
+                      offset: const Offset(0, -5),
+                      child: IconButton(
+                        icon: Icon(
+                          _passwordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _passwordVisible = !_passwordVisible;
+                          });
+                        },
                       ),
-                      onPressed: () {
-                        setState(() {
-                          _passwordVisible = !_passwordVisible;
-                        });
-                      },
                     ),
                   ),
                 ),
@@ -133,15 +138,172 @@ class _LoginScreenState extends State<LoginScreen> {
                             if (documentSnapshot.exists) {
                               Map<String, dynamic> data = documentSnapshot
                                   .data() as Map<String, dynamic>;
-                              data['role'] == 'student'
-                                  ? Navigator.pushReplacement(context,
-                                      MaterialPageRoute(builder: (context) {
-                                      return UserHomeScreen();
-                                    }))
-                                  : Navigator.pushReplacement(context,
-                                      MaterialPageRoute(builder: (context) {
-                                      return AdminHomeScreen();
-                                    }));
+
+                              if (data['role'] == 'student') {
+                                //check if user is student have attendance of current month
+                                CollectionReference attendance =
+                                    FirebaseFirestore.instance
+                                        .collection('attendance');
+                                // where user id is equal to current user id and month is equal to current month
+                                attendance
+                                    .where('uid',
+                                        isEqualTo: FirebaseAuth
+                                            .instance.currentUser!.uid)
+                                    .where('current_month',
+                                        isEqualTo: DateTime.now().month)
+                                    .where('current_year',
+                                        isEqualTo: DateTime.now().year)
+                                    .get()
+                                    .then((value) {
+                                  if (value.docs.isEmpty) {
+                                    // create attendance for current month
+                                    CollectionReference attendance =
+                                        FirebaseFirestore.instance
+                                            .collection('attendance');
+                                    attendance.doc().set({
+                                      'uid': FirebaseAuth
+                                          .instance.currentUser!.uid,
+                                      'current_month': DateTime.now().month,
+                                      'current_year': DateTime.now().year,
+                                      'data': {
+                                        '1': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '2': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '3': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '4': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '5': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '6': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '7': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '8': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '9': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '10': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '11': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '12': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '13': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '14': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '15': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '16': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '17': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '18': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '19': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '20': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '21': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '22': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '23': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '24': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '25': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '26': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '27': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '28': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '29': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '30': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                        '31': {
+                                          'breakfast': false,
+                                          'lunch': false
+                                        },
+                                      }
+                                    });
+                                  }
+                                });
+
+                                Navigator.pushReplacement(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return UserHomeScreen();
+                                }));
+                              } else
+                                Navigator.pushReplacement(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return AdminHomeScreen();
+                                }));
                             } else {
                               print('Document does not exist in the database');
                             }

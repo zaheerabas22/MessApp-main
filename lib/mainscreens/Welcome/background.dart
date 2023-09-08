@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 class Background extends StatelessWidget {
   final Widget child;
@@ -15,6 +14,7 @@ class Background extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue[50],
       resizeToAvoidBottomInset: false,
       body: SizedBox(
         width: double.infinity,
