@@ -21,6 +21,7 @@ class AttendanceScreen extends StatefulWidget {
 class _AttendanceScreenState extends State<AttendanceScreen> {
   DateTime selectedDate = DateTime.now();
   List<AttendanceData> attendanceDataList = [];
+  AttendanceModel? attendanceModelz;
   CollectionReference attendanceCollection =
       FirebaseFirestore.instance.collection('attendance');
   @override
@@ -53,7 +54,10 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              PdfInvoiceService.createInvoice().then((value) {
+              if (attendanceModelz == null) return;
+              PdfInvoiceService.createInvoice(
+                attendanceModel: attendanceModelz!,
+              ).then((value) {
                 PdfInvoiceService.savePdfFile(
                     "file${DateTime.now().millisecond}.pdf", value);
               });
@@ -100,6 +104,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   final AttendanceModel attendanceModel =
                       AttendanceModel.fromJson(snapshot.data!.docs.first.data()
                           as Map<String, dynamic>);
+                          attendanceModelz = attendanceModel;
                   final List<DayData> dayDataList = attendanceModel.data;
                   // check how many days  can in current month
                   final daysInMonth =
