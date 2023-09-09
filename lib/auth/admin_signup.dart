@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:messapp/auth/login.dart';
+import 'package:messapp/auth/user_signup.dart';
 
 class AdminSignUpScreen extends StatefulWidget {
   const AdminSignUpScreen({super.key});
@@ -25,6 +26,17 @@ class _AdminSignUpScreenState extends State<AdminSignUpScreen> {
     }
     if (!value.endsWith('@uog.edu.pk')) {
       return 'Email must end with @uog.edu.pk';
+    }
+    return null;
+  }
+
+  // Custom validator for name (only alphabets)
+  String? validateName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your name';
+    }
+    if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+      return 'Name can only contain alphabets';
     }
     return null;
   }
@@ -60,12 +72,7 @@ class _AdminSignUpScreenState extends State<AdminSignUpScreen> {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.9,
                 child: TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your name';
-                    }
-                    return null;
-                  },
+                  validator: validateName, // Use custom name validator
                   onSaved: (value) {
                     _name = value!;
                   },
@@ -213,6 +220,27 @@ class _AdminSignUpScreenState extends State<AdminSignUpScreen> {
                     },
                     child: const Text(
                       'Login',
+                      style: TextStyle(
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Sign Up as Student?"),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return const UserSignupScreen();
+                      }));
+                    },
+                    child: const Text(
+                      'Student Signup',
                       style: TextStyle(
                         color: Colors.blue,
                       ),

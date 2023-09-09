@@ -10,8 +10,8 @@ class PdfInvoiceService {
   // createInvoice();
   static Future<Uint8List> createInvoice() async {
     final pdf = pw.Document();
-    // final image =
-    //     (await rootBundle.load("assets/images/logo.png")).buffer.asUint8List();
+    final image =
+        (await rootBundle.load("assets/images/logo.png")).buffer.asUint8List();
     // final arabicTax =
     //     (await rootBundle.load("assets/images/tax.png")).buffer.asUint8List();
 
@@ -21,8 +21,7 @@ class PdfInvoiceService {
           left: 20.0, right: 20.0, top: 0, bottom: 26.0),
       build: (pw.Context context) {
         return pw.Column(children: [
-          pw.SizedBox(height: 20.0),
-          pw.SizedBox(height: 10.0),
+          pw.SizedBox(height: 50.0),
           pw.Container(
             alignment: pw.Alignment.center,
             child: pw.Text(
@@ -35,75 +34,99 @@ class PdfInvoiceService {
           ),
           pw.SizedBox(height: 20.0),
           pw.Container(
-            child: pw.Padding(
-              padding: const pw.EdgeInsets.all(10.0),
-              child: pw.Column(
-                crossAxisAlignment: pw.CrossAxisAlignment.start,
-                children: [
-                  pw.Container(
-                    decoration: pw.BoxDecoration(
-                      border: pw.Border.all(
-                        color: PdfColors.black,
-                      ),
-                    ),
-                    height: 30,
-                    width: 500,
-                    child: pw.Text(
-                      'Roll Number: 19011519-122',
-                      style: const pw.TextStyle(
-                        fontSize: 18.0,
-                      ),
-                    ),
-                  ),
-                  pw.Container(
-                    decoration: pw.BoxDecoration(
-                      border: pw.Border.all(
-                        color: PdfColors.black,
-                      ),
-                    ),
-                    height: 30,
-                    width: 500,
-                    child: pw.Text(
-                      'Father Name: Muhammad Iqbal',
-                      style: const pw.TextStyle(
-                        fontSize: 18.0,
-                      ),
-                    ),
-                  ),
-                  pw.Container(
-                    decoration: pw.BoxDecoration(
-                      border: pw.Border.all(
-                        color: PdfColors.black,
-                      ),
-                    ),
-                    height: 30,
-                    width: 500,
-                    child: pw.Text(
-                      'Roll Number: 19011519-122',
-                      style: const pw.TextStyle(
-                        fontSize: 18.0,
-                      ),
-                    ),
-                  ),
-                  pw.Container(
-                    decoration: pw.BoxDecoration(
-                      border: pw.Border.all(
-                        color: PdfColors.black,
-                      ),
-                    ),
-                    height: 30,
-                    width: 500,
-                    child: pw.Text(
-                      'Attendance Report: 30%',
-                      style: const pw.TextStyle(
-                        fontSize: 18.0,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            alignment: pw.Alignment.center,
+            child: pw.Image(
+              pw.MemoryImage(image),
             ),
+            height: 150,
+            width: 150,
           ),
+          pw.SizedBox(height: 20.0),
+          pw.Column(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.center,
+              children: [
+                pw.Container(
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(
+                      color: PdfColors.black,
+                    ),
+                  ),
+                  height: 30,
+                  width: 250,
+                  padding: const pw.EdgeInsets.all(8.0),
+                  child: pw.Text(
+                    'Name',
+                    style: const pw.TextStyle(
+                      fontSize: 18.0,
+                    ),
+                  ),
+                ),
+                pw.Column(
+                    mainAxisAlignment: pw.MainAxisAlignment.center,
+                    children: [
+                      pw.Container(
+                        decoration: pw.BoxDecoration(
+                          border: pw.Border.all(
+                            color: PdfColors.black,
+                          ),
+                        ),
+                        padding: const pw.EdgeInsets.all(8.0),
+                        height: 30,
+                        width: 250,
+                        child: pw.Text(
+                          'Zaeer Abbas',
+                          style: const pw.TextStyle(
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ),
+                    ]),
+              ],
+            ),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.center,
+              children: [
+                pw.Container(
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(
+                      color: PdfColors.black,
+                    ),
+                  ),
+                  height: 30,
+                  width: 250,
+                  padding: const pw.EdgeInsets.all(8.0),
+                  child: pw.Text(
+                    'Rolnmbr',
+                    style: const pw.TextStyle(
+                      fontSize: 18.0,
+                    ),
+                  ),
+                ),
+                pw.Column(
+                  mainAxisAlignment: pw.MainAxisAlignment.center,
+                  children: [
+                    pw.Container(
+                      decoration: pw.BoxDecoration(
+                        border: pw.Border.all(
+                          color: PdfColors.black,
+                        ),
+                      ),
+                      padding: const pw.EdgeInsets.all(8.0),
+                      height: 30,
+                      width: 250,
+                      child: pw.Text(
+                        '122',
+                        style: const pw.TextStyle(
+                          fontSize: 18.0,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ]),
         ]);
       },
     ));

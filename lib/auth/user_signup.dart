@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:messapp/auth/admin_signup.dart';
 import 'package:messapp/auth/login.dart';
 
 class UserSignupScreen extends StatefulWidget {
@@ -13,7 +14,7 @@ class UserSignupScreen extends StatefulWidget {
 class _UserSignupScreenState extends State<UserSignupScreen> {
   final _formKey = GlobalKey<FormState>();
   String _name = '';
-  String _rollno = '';
+  String _rollNo = '';
   String _email = '';
   String _password = '';
   bool _isLoading = false;
@@ -26,6 +27,28 @@ class _UserSignupScreenState extends State<UserSignupScreen> {
     }
     if (!value.endsWith('@uog.edu.pk')) {
       return 'Email must end with @uog.edu.pk';
+    }
+    return null;
+  }
+
+  // Custom validator for name (only alphabets)
+  String? validateName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your name';
+    }
+    if (!RegExp(r'^[a-zA-Z ]+$').hasMatch(value)) {
+      return 'Name can only contain alphabets and spaces';
+    }
+    return null;
+  }
+
+  // Custom validator for roll number (only numbers)
+  String? validateRollNo(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your roll number';
+    }
+    if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+      return 'Roll number can only contain numbers';
     }
     return null;
   }
@@ -61,12 +84,7 @@ class _UserSignupScreenState extends State<UserSignupScreen> {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.9,
                 child: TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your name';
-                    }
-                    return null;
-                  },
+                  validator: validateName, // Use custom name validator
                   onSaved: (value) {
                     _name = value!;
                   },
@@ -85,18 +103,13 @@ class _UserSignupScreenState extends State<UserSignupScreen> {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.9,
                 child: TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your roll no.';
-                    }
-                    return null;
-                  },
+                  validator: validateRollNo, // Use custom roll number validator
                   onSaved: (value) {
-                    _rollno = value!;
+                    _rollNo = value!;
                   },
                   decoration: InputDecoration(
                     labelText: 'Roll No.',
-                    prefixIcon: Icon(Icons.school),
+                    prefixIcon: Icon(Icons.confirmation_number),
                     filled: true,
                     fillColor: Colors.white, // Background color
                     border: OutlineInputBorder(
@@ -187,7 +200,7 @@ class _UserSignupScreenState extends State<UserSignupScreen> {
                               .set({
                             'uid': FirebaseAuth.instance.currentUser!.uid,
                             'name': _name,
-                            'rollno': _rollno,
+                            'rollno': _rollNo,
                             'email': _email,
                             'password': _password,
                             'role': 'student',
@@ -286,6 +299,27 @@ class _UserSignupScreenState extends State<UserSignupScreen> {
                     },
                     child: const Text(
                       'Login',
+                      style: TextStyle(
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Sign Up as Admin?"),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return const AdminSignUpScreen();
+                      }));
+                    },
+                    child: const Text(
+                      'Admin SignUp',
                       style: TextStyle(
                         color: Colors.blue,
                       ),
