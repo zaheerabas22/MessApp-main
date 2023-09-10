@@ -11,7 +11,51 @@ class PdfInvoiceService {
   // createInvoice();
   static Future<Uint8List> createInvoice({
     required AttendanceModel attendanceModel,
+    required String name,
+    required String rollNo,
+    required String dueDate,
+    required String billNo,
   }) async {
+    List<DayData> data = attendanceModel.data;
+    // get month name from month number
+    String monthNameFromMonthNumber = attendanceModel.currentMonth == 1
+        ? 'January'
+        : attendanceModel.currentMonth == 2
+            ? 'February'
+            : attendanceModel.currentMonth == 3
+                ? 'March'
+                : attendanceModel.currentMonth == 4
+                    ? 'April'
+                    : attendanceModel.currentMonth == 5
+                        ? 'May'
+                        : attendanceModel.currentMonth == 6
+                            ? 'June'
+                            : attendanceModel.currentMonth == 7
+                                ? 'July'
+                                : attendanceModel.currentMonth == 8
+                                    ? 'August'
+                                    : attendanceModel.currentMonth == 9
+                                        ? 'September'
+                                        : attendanceModel.currentMonth == 10
+                                            ? 'October'
+                                            : attendanceModel.currentMonth == 11
+                                                ? 'November'
+                                                : 'December';
+    int totalBreakfast = 0;
+    int totalLunch = 0;
+
+    for (int i = 0; i < data.length; i++) {
+      if (data[i].breakfast == true) {
+        totalBreakfast++;
+      }
+      if (data[i].lunch == true) {
+        totalLunch++;
+      }
+    }
+
+    int totalBill = ((totalBreakfast) + (totalLunch)) * 300;
+
+    // total count of true in
     final pdf = pw.Document();
     final image =
         (await rootBundle.load("assets/images/logo.png")).buffer.asUint8List();
@@ -28,7 +72,7 @@ class PdfInvoiceService {
             child: pw.Text(
               'Smart Mess App',
               style: pw.TextStyle(
-                fontSize: 18.0,
+                fontSize: 24.0,
                 fontWeight: pw.FontWeight.bold,
               ),
             ),
@@ -70,7 +114,7 @@ class PdfInvoiceService {
             width: 500,
             alignment: pw.Alignment.center,
             child: pw.Text(
-              'Month ..g. September',
+              '$monthNameFromMonthNumber/${attendanceModel.currentYear}',
               style: pw.TextStyle(
                 fontSize: 20.0,
                 fontWeight: pw.FontWeight.bold,
@@ -110,7 +154,7 @@ class PdfInvoiceService {
                         height: 30,
                         width: 250,
                         child: pw.Text(
-                          'Zaeer Abbas',
+                          name,
                           style: const pw.TextStyle(
                             fontSize: 18.0,
                           ),
@@ -151,7 +195,7 @@ class PdfInvoiceService {
                       height: 30,
                       width: 250,
                       child: pw.Text(
-                        '122',
+                        rollNo,
                         style: const pw.TextStyle(
                           fontSize: 18.0,
                         ),
@@ -193,7 +237,7 @@ class PdfInvoiceService {
                       height: 30,
                       width: 250,
                       child: pw.Text(
-                        '123',
+                        billNo,
                         style: const pw.TextStyle(
                           fontSize: 18.0,
                         ),
@@ -235,7 +279,7 @@ class PdfInvoiceService {
                       height: 30,
                       width: 250,
                       child: pw.Text(
-                        'Date',
+                        dueDate,
                         style: const pw.TextStyle(
                           fontSize: 18.0,
                         ),
@@ -361,7 +405,7 @@ class PdfInvoiceService {
                       height: 30,
                       width: 250,
                       child: pw.Text(
-                        'Note: get from attendace .e.g. 1 att = 1Unit',
+                        (totalBreakfast + totalLunch).toString(),
                         style: const pw.TextStyle(
                           fontSize: 18.0,
                         ),
@@ -384,7 +428,7 @@ class PdfInvoiceService {
                   width: 250,
                   padding: const pw.EdgeInsets.all(8.0),
                   child: pw.Text(
-                    'Mess Bill',
+                    'Unit Cost',
                     style: const pw.TextStyle(
                       fontSize: 18.0,
                     ),
@@ -446,7 +490,7 @@ class PdfInvoiceService {
                       height: 30,
                       width: 250,
                       child: pw.Text(
-                        'Unit * attendace',
+                        totalBill.toString(),
                         style: const pw.TextStyle(
                           fontSize: 18.0,
                         ),

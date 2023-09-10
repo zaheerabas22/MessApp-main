@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class InventoryItem {
+  final String id;
   final String name;
   final int quantity;
 
-  InventoryItem({required this.name, required this.quantity});
+  InventoryItem({required this.id, required this.name, required this.quantity});
 }
 
 class InventoryManagementScreen extends StatefulWidget {
@@ -40,6 +41,7 @@ class _InventoryManagementScreenState extends State<InventoryManagementScreen> {
       final snapshot = await _firestore.collection('inventory').get();
       items = snapshot.docs
           .map((doc) => InventoryItem(
+                id: doc.id,
                 name: doc['name'] ?? '',
                 quantity: doc['quantity'] ?? 0,
               ))
@@ -148,26 +150,20 @@ class _InventoryManagementScreenState extends State<InventoryManagementScreen> {
                                   ),
                                   TextButton(
                                     onPressed: () async {
-                                      // Get the name of the item to delete
-                                      String itemNameToDelete =
-                                          inventoryItems[index].name;
+                                      // Get the ID of the item to delete
+                                      String itemIdToDelete =
+                                          inventoryItems[index].id;
 
                                       // Remove the item from the list
                                       setState(() {
                                         inventoryItems.removeAt(index);
                                       });
 
-                                      // Delete the item from Firestore by matching the name
-                                      QuerySnapshot snapshot = await _firestore
+                                      // Delete the item from Firestore by ID
+                                      await _firestore
                                           .collection('inventory')
-                                          .where('name',
-                                              isEqualTo: itemNameToDelete)
-                                          .get();
-
-                                      // Assuming there's only one matching document, delete it
-                                      snapshot.docs.forEach((doc) {
-                                        doc.reference.delete();
-                                      });
+                                          .doc(itemIdToDelete)
+                                          .delete();
 
                                       Navigator.of(context)
                                           .pop(); // Close the dialog
@@ -219,15 +215,10 @@ class _InventoryManagementScreenState extends State<InventoryManagementScreen> {
     if (user != null) {
       await _firestore
           .collection('inventory')
-          .where('name', isEqualTo: updatedItem.name)
-          .get()
-          .then((QuerySnapshot querySnapshot) {
-        querySnapshot.docs.forEach((doc) {
-          doc.reference.update({
-            'name': updatedItem.name,
-            'quantity': updatedItem.quantity,
-          });
-        });
+          .doc(updatedItem.id) // Use the item's ID to update
+          .update({
+        'name': updatedItem.name,
+        'quantity': updatedItem.quantity,
       });
     }
   }
@@ -266,7 +257,7 @@ class _EditInventoryItemScreenState extends State<EditInventoryItemScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             TextField(
-              controller: _nameController,
+              controller: _nameController, // Update name here
               decoration: InputDecoration(labelText: 'Name'),
             ),
             TextFormField(
@@ -287,13 +278,13 @@ class _EditInventoryItemScreenState extends State<EditInventoryItemScreen> {
             ElevatedButton(
               onPressed: () {
                 // Validate and save changes
-                String name = _nameController.text.trim();
+                String name = _nameController.text.trim(); // Get updated name
                 int quantity = int.tryParse(_quantityController.text) ?? 0;
 
-                if (name.isNotEmpty && quantity > 0) {
+                if (name.isNotEmpty && quantity >= 0) {
                   // Create the updated item and return it to the previous screen
-                  InventoryItem updatedItem =
-                      InventoryItem(name: name, quantity: quantity);
+                  InventoryItem updatedItem = InventoryItem(
+                      id: widget.item.id, name: name, quantity: quantity);
                   Navigator.pop(context, updatedItem);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -360,7 +351,7 @@ class _AddInventoryItemScreenState extends State<AddInventoryItemScreen> {
                 if (name.isNotEmpty && quantity > 0) {
                   // Create the new item and return it to the previous screen
                   InventoryItem newItem =
-                      InventoryItem(name: name, quantity: quantity);
+                      InventoryItem(id: '', name: name, quantity: quantity);
                   Navigator.pop(context, newItem);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
