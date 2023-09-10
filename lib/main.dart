@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:messapp/mainscreens/adminhome.dart';
 import 'package:messapp/mainscreens/Welcome/welcome_screen.dart';
 
 import 'auth/login.dart';
